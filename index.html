@@ -1,0 +1,495 @@
+<title>Sebastián Escobar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#07080a;
+    --bg-raised:#111318;
+    --bg-raised-2:#161a20;
+    --line:#242832;
+    --ink:#f3f5f8;
+    --ink-soft:#8b93a1;
+    --blue:#3b82f6;
+    --blue-bright:#7fb3ff;
+    --blue-glow: rgba(59,130,246,.5);
+    color-scheme: dark;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ text-size-adjust:100%; }
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', system-ui, sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    padding:0 20px;
+    overflow-x:hidden;
+  }
+  ::selection{ background:var(--blue); color:#fff; }
+  a{ color:inherit; }
+  :focus-visible{ outline:2px solid var(--blue); outline-offset:3px; }
+
+  /* --- custom cursor: small classic pointer hand, blue on hover, neutral on click --- */
+  a, button, [role="button"]{
+    cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22'><g fill='%233b82f6' stroke='%2307080a' stroke-width='0.7'><rect x='8' y='2' width='4' height='9' rx='2'/><rect x='5' y='8' width='12' height='9' rx='4'/><rect x='3' y='11' width='4' height='6' rx='2'/></g></svg>") 10 3, pointer;
+  }
+  a:active, button:active, [role="button"]:active{
+    cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='22' height='22' viewBox='0 0 22 22'><g fill='%23f3f5f8' stroke='%2307080a' stroke-width='0.7'><rect x='5' y='6' width='12' height='11' rx='5'/><circle cx='7.5' cy='7' r='1.8'/><circle cx='10.5' cy='6' r='1.8'/><circle cx='13.5' cy='6.6' r='1.8'/></g></svg>") 11 9, pointer;
+  }
+
+  .mono{ font-family:'IBM Plex Mono', ui-monospace, monospace; }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.72rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--blue-bright);
+    font-weight:600;
+  }
+  h1,h2,h3{ text-wrap:balance; margin:0; }
+
+  .wrap{ max-width:740px; margin:0 auto; }
+
+  .display{ font-family:'Cinzel Decorative', serif; }
+
+  /* --- sticky name bar --- */
+  .stick{
+    position:sticky; top:0; z-index:60;
+    margin:0 -20px; padding:16px 20px;
+    display:flex; align-items:center; justify-content:space-between;
+    background:rgba(7,8,10,.55);
+    border-bottom:1px solid transparent;
+    transition:background .35s ease, border-color .35s ease, box-shadow .35s ease, padding .35s ease;
+  }
+  .stick.scrolled{
+    background:rgba(7,8,10,.9);
+    backdrop-filter:blur(10px);
+    border-color:var(--line);
+    box-shadow:0 12px 30px -14px var(--blue-glow);
+    padding:11px 20px;
+  }
+  .stick-name{
+    font-family:'Cinzel Decorative', serif;
+    font-weight:700;
+    font-size:1.05rem;
+    white-space:nowrap;
+    color:var(--ink);
+    text-decoration:none;
+    letter-spacing:.01em;
+  }
+
+  .menu-toggle{
+    background:none; border:1px solid var(--line); border-radius:2px;
+    width:42px; height:38px; padding:0;
+    display:flex; align-items:center; justify-content:center;
+    position:relative; flex:none;
+    transition:border-color .2s ease, box-shadow .2s ease;
+  }
+  .menu-toggle:hover, .menu-toggle[aria-expanded="true"]{ border-color:var(--blue); box-shadow:0 0 16px -2px var(--blue-glow); }
+  .menu-toggle span{
+    position:absolute; left:11px; width:20px; height:2px; background:var(--ink);
+    transition:transform .3s ease, opacity .3s ease, background .2s ease;
+  }
+  .menu-toggle span:nth-child(1){ top:14px; }
+  .menu-toggle span:nth-child(2){ top:19px; }
+  .menu-toggle span:nth-child(3){ top:24px; }
+  .menu-toggle[aria-expanded="true"] span{ background:var(--blue-bright); }
+  .menu-toggle[aria-expanded="true"] span:nth-child(1){ transform:translateY(5px) rotate(45deg); }
+  .menu-toggle[aria-expanded="true"] span:nth-child(2){ opacity:0; }
+  .menu-toggle[aria-expanded="true"] span:nth-child(3){ transform:translateY(-5px) rotate(-45deg); }
+
+  .dropdown{
+    position:absolute; right:20px; top:calc(100% + 8px);
+    background:var(--bg-raised); border:1px solid var(--line);
+    border-radius:3px; min-width:200px;
+    padding:8px; display:flex; flex-direction:column; gap:2px;
+    opacity:0; transform:translateY(-8px) scale(.98);
+    pointer-events:none;
+    transition:opacity .25s ease, transform .25s ease, box-shadow .25s ease;
+    box-shadow:0 10px 30px -10px rgba(0,0,0,.6);
+  }
+  .dropdown.open{
+    opacity:1; transform:translateY(0) scale(1); pointer-events:auto;
+    box-shadow:0 18px 44px -12px var(--blue-glow), 0 10px 30px -10px rgba(0,0,0,.7);
+  }
+  .dropdown a{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.82rem; letter-spacing:.04em; text-transform:uppercase;
+    text-decoration:none; color:var(--ink);
+    padding:11px 12px; border-radius:2px;
+    display:block;
+    transition:background .2s ease, color .2s ease, padding-left .2s ease;
+  }
+  .dropdown a:hover, .dropdown a:focus-visible{ background:var(--bg-raised-2); color:var(--blue-bright); padding-left:16px; }
+
+  header.hero{ padding:56px 0 60px; }
+  .badge-row{ display:flex; align-items:center; gap:10px; margin-bottom:26px; }
+  .badge-dot{ width:7px; height:7px; border-radius:50%; background:var(--blue); flex:none; box-shadow:0 0 10px var(--blue-glow); }
+
+  h1.name{
+    font-family:'Cinzel Decorative', serif;
+    font-weight:700;
+    font-size:clamp(1.7rem, 8.6vw, 4rem);
+    line-height:1.08;
+    white-space:nowrap;
+    margin:0 0 16px;
+    color:var(--ink);
+  }
+  .role{
+    font-size:clamp(1rem,2.4vw,1.2rem);
+    font-weight:500;
+    color:var(--ink-soft);
+    margin:0 0 30px;
+  }
+
+  .cta-row{ display:flex; gap:12px; flex-wrap:wrap; }
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:12px 20px;
+    border-radius:2px;
+    font-weight:600;
+    font-size:.94rem;
+    text-decoration:none;
+    border:1px solid transparent;
+    transition:transform .15s ease, background .15s ease, box-shadow .2s ease;
+  }
+  .btn-primary{ background:var(--blue); color:#fff; }
+  .btn-primary:hover{ transform:translateY(-1px); box-shadow:0 10px 26px -10px var(--blue-glow); }
+  .btn-ghost{ border-color:var(--line); color:var(--ink); }
+  .btn-ghost:hover{ border-color:var(--blue); color:var(--blue-bright); }
+
+  section{ padding:54px 0; border-top:1px solid var(--line); }
+  .sec-head{ display:flex; flex-direction:column; gap:4px; margin-bottom:28px; }
+  .sec-num{ font-family:'IBM Plex Mono',monospace; color:var(--ink-soft); font-size:.72rem; letter-spacing:.1em; }
+  .sec-title{
+    font-family:'Cinzel Decorative', serif; font-weight:700; font-size:1.5rem;
+    letter-spacing:.01em;
+  }
+
+  /* scroll reveal (progressive enhancement — visible by default) */
+  .reveal{ opacity:1; transform:none; }
+  .js .reveal{ opacity:0; transform:translateY(18px); transition:opacity .7s ease, transform .7s ease; }
+  .js .reveal.in-view{ opacity:1; transform:translateY(0); }
+
+  .about p{ margin:0 0 16px; max-width:64ch; color:var(--ink-soft); }
+  .about p:last-child{ margin-bottom:22px; }
+
+  .list-label{ font-family:'IBM Plex Mono',monospace; font-size:.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin:22px 0 10px; }
+  .dot-list{ display:flex; flex-wrap:wrap; gap:0; font-size:.92rem; }
+  .dot-list span{ transition:color .2s ease; }
+  .dot-list span:hover{ color:var(--blue-bright); }
+  .dot-list span:not(:last-child)::after{ content:'·'; margin:0 10px; color:var(--line); }
+
+  .about-note{ margin-top:26px; font-size:.92rem; color:var(--ink-soft); border-left:2px solid var(--line); padding-left:14px; }
+  .about-note b{ color:var(--ink); }
+
+  .tools-lead{ color:var(--ink-soft); margin:0 0 6px; max-width:60ch; }
+
+  /* --- project --- */
+  .project-head{ margin-bottom:8px; }
+  .project-title{ font-family:'Cinzel Decorative', serif; font-weight:700; font-size:1.35rem; }
+  .project-loc{ font-family:'IBM Plex Mono',monospace; font-size:.72rem; letter-spacing:.08em; color:var(--ink-soft); text-transform:uppercase; margin-top:4px; }
+
+  .status-line{ display:flex; align-items:center; gap:9px; margin:16px 0 18px; }
+  .status-line .mono{ font-size:.75rem; letter-spacing:.05em; text-transform:uppercase; color:var(--ink-soft); }
+
+  .project-desc{ margin:0 0 18px; max-width:60ch; color:var(--ink-soft); }
+  .project-focus{
+    border-left:2px solid var(--blue);
+    padding:2px 0 2px 14px;
+    margin-bottom:22px;
+    font-size:.92rem;
+    color:var(--ink-soft);
+  }
+  .project-focus .mono{ color:var(--blue-bright); text-transform:uppercase; font-size:.72rem; letter-spacing:.08em; }
+
+  /* --- expandable preview --- */
+  .preview-toggle{
+    width:100%; display:flex; align-items:center; justify-content:space-between; gap:10px;
+    background:none; border:1px solid var(--line); border-radius:2px;
+    padding:13px 16px; color:var(--ink);
+    font-family:'IBM Plex Mono',monospace; font-size:.78rem; letter-spacing:.06em; text-transform:uppercase;
+    transition:border-color .2s ease, color .2s ease;
+  }
+  .preview-toggle:hover{ border-color:var(--blue); color:var(--blue-bright); }
+  .preview-toggle .chev{ transition:transform .3s ease; flex:none; }
+  .preview-toggle[aria-expanded="true"] .chev{ transform:rotate(180deg); }
+  /* --- full-screen project modal --- */
+  .proj-modal{ position:fixed; inset:0; z-index:200; background:var(--bg); display:flex; flex-direction:column; }
+  .proj-modal[hidden]{ display:none; }
+  .proj-modal-bar{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 18px; border-bottom:1px solid var(--line); flex:none; }
+  .proj-modal-bar .mono{ font-size:.78rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft); }
+  .proj-modal-close{
+    background:none; border:1px solid var(--line); color:var(--ink);
+    width:38px; height:38px; border-radius:2px; font-size:1.05rem; line-height:1;
+    display:flex; align-items:center; justify-content:center; flex:none;
+    transition:border-color .2s ease, color .2s ease, box-shadow .2s ease;
+  }
+  .proj-modal-close:hover{ border-color:var(--blue); color:var(--blue-bright); box-shadow:0 0 14px -2px var(--blue-glow); }
+  .proj-modal-body{ flex:1; min-height:0; background:#0c0c0c; }
+  .proj-modal-body iframe{ width:100%; height:100%; border:0; display:block; }
+
+  .built-with{ display:flex; flex-wrap:wrap; gap:0; margin:20px 0 14px; }
+  .built-with span{ font-family:'IBM Plex Mono',monospace; font-size:.72rem; color:var(--ink-soft); }
+  .built-with span:not(:last-child)::after{ content:'·'; margin:0 8px; color:var(--line); }
+
+  .stats-row{ display:flex; flex-wrap:wrap; gap:32px; margin-top:32px; padding-top:26px; border-top:1px solid var(--line); }
+  .stat dt{ font-family:'IBM Plex Mono',monospace; font-size:.68rem; letter-spacing:.09em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 5px; }
+  .stat dd{ margin:0; font-weight:600; color:var(--blue-bright); }
+
+  /* --- contact --- */
+  .contact-copy{ max-width:54ch; color:var(--ink-soft); margin-bottom:22px; }
+  .email-btn{
+    display:inline-flex; align-items:center; gap:10px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:1rem;
+    padding:14px 22px;
+    background:var(--blue); color:#fff;
+    text-decoration:none;
+    border-radius:2px;
+    font-weight:600;
+  }
+  .email-btn:hover{ box-shadow:0 12px 30px -10px var(--blue-glow); }
+  .contact-meta{ margin-top:20px; color:var(--ink-soft); }
+
+  .msg-form{ display:grid; gap:14px; max-width:480px; margin-top:34px; }
+  .msg-form label{ font-family:'IBM Plex Mono',monospace; font-size:.7rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-soft); display:block; margin-bottom:6px; }
+  .msg-form input, .msg-form textarea{
+    width:100%; background:var(--bg-raised); border:1px solid var(--line); border-radius:2px;
+    color:var(--ink); font-family:'IBM Plex Sans', sans-serif; font-size:.95rem;
+    padding:11px 12px; resize:vertical;
+    transition:border-color .2s ease, box-shadow .2s ease;
+  }
+  .msg-form input:focus, .msg-form textarea:focus{ border-color:var(--blue); box-shadow:0 0 0 3px rgba(59,130,246,.18); outline:none; }
+  .msg-submit{
+    justify-self:start;
+    background:transparent; color:var(--ink); border:1px solid var(--blue);
+    padding:12px 22px; border-radius:2px; font-weight:600; font-size:.94rem;
+    font-family:'IBM Plex Sans', sans-serif;
+    transition:background .2s ease, color .2s ease, box-shadow .2s ease;
+  }
+  .msg-submit:hover{ background:var(--blue); box-shadow:0 10px 26px -10px var(--blue-glow); }
+  .msg-status{ font-size:.85rem; color:var(--blue-bright); min-height:1.2em; }
+
+  footer{ padding:26px 0 60px; font-family:'IBM Plex Mono',monospace; font-size:.72rem; letter-spacing:.06em; color:var(--ink-soft); text-transform:uppercase; text-align:center; }
+
+  @media (prefers-reduced-motion:reduce){
+    *{ transition-duration:.01ms !important; animation:none !important; scroll-behavior:auto !important; }
+  }
+</style>
+
+<div class="stick" id="stickBar">
+  <a class="stick-name" href="#top">Sebastián Escobar</a>
+  <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="dropdownMenu" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+  <nav class="dropdown" id="dropdownMenu" role="menu">
+    <a role="menuitem" href="#about">About</a>
+    <a role="menuitem" href="#tools">Tools</a>
+    <a role="menuitem" href="#bigrons">Projects</a>
+    <a role="menuitem" href="#contact">Contact</a>
+  </nav>
+</div>
+
+<div class="wrap">
+
+  <header class="hero" id="top">
+    <div class="badge-row">
+      <span class="badge-dot"></span>
+      <span class="eyebrow">Web Design &amp; Front-End Development</span>
+    </div>
+    <h1 class="name">Sebastián Escobar</h1>
+    <p class="role">Web Designer &amp; Front-End Developer</p>
+
+    <div class="cta-row">
+      <a class="btn btn-primary" href="mailto:sebastianescobar180@gmail.com">Email me</a>
+      <a class="btn btn-ghost" href="#bigrons">See the Big Ron's build ↓</a>
+    </div>
+  </header>
+
+  <section class="about reveal" id="about">
+    <div class="sec-head">
+      <span class="sec-num">01</span>
+      <h2 class="sec-title">About</h2>
+    </div>
+    <p>Web Designer and Front-End Developer with formal training in Web Design and a practical focus on HTML, CSS and JavaScript. Currently developing real-world web and digital projects.</p>
+    <p>Interested in combining web design, front-end development, local SEO, digital marketing and AI-assisted tools to create practical digital solutions for businesses. Brings 4+ years of customer facing hospitality experience, including two years as a cafe manager, with strong communication, organisation, problem solving and team leadership skills.</p>
+
+    <p class="list-label">Shipped in production</p>
+    <div class="dot-list">
+      <span>HTML5</span><span>CSS3 / Sass</span><span>JavaScript</span><span>PHP</span><span>On-page SEO</span><span>Schema.org / JSON-LD</span><span>Google Business Profile</span>
+    </div>
+    <p class="list-label">Currently building with</p>
+    <div class="dot-list">
+      <span>Node.js + Express</span><span>REST APIs</span><span>React</span><span>Next.js</span><span>Python</span><span>AI-assisted workflows</span>
+    </div>
+
+    <div class="about-note"><b>From the hospitality side:</b> team leadership, multicultural client communication, and staying calm when three things break at once — skills that transfer directly to freelance client work.</div>
+  </section>
+
+  <section class="tools reveal" id="tools">
+    <div class="sec-head">
+      <span class="sec-num">02</span>
+      <h2 class="sec-title">Tools</h2>
+    </div>
+    <p class="tools-lead">Software I build with day to day:</p>
+    <div class="dot-list">
+      <span>Antigravity IDE</span><span>VS Code</span><span>Claude Code</span><span>Node.js</span><span>Git</span><span>Google Business Profile</span><span>Chrome DevTools</span>
+    </div>
+  </section>
+
+  <section class="work reveal" id="bigrons">
+    <div class="sec-head">
+      <span class="sec-num">03</span>
+      <h2 class="sec-title">Projects</h2>
+    </div>
+
+    <div class="project-head">
+      <h3 class="project-title">Big Ron's Records</h3>
+      <p class="project-loc">Ta' Xbiex, Malta · Vinyl bar &amp; record store</p>
+    </div>
+
+    <div class="status-line">
+      <span class="badge-dot"></span>
+      <span class="mono">In progress — currently building the backend</span>
+    </div>
+
+    <p class="project-desc">A vinyl record store design focused on boosting SEO, digital sales and music marketing for the artists — building toward a future record label and driving sales of resident DJs' tracks. Not just a website, but a digital business built to keep growing every day.</p>
+
+    <div class="project-focus"><span class="mono">Focus</span><br>SEO · Digital Business · Marketing</div>
+
+    <button class="preview-toggle" id="previewToggle" aria-haspopup="dialog" aria-expanded="false" aria-controls="projModal">
+      <span>View live preview</span>
+      <svg class="chev" width="13" height="13" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6V2h4M14 10v4h-4M2 2l5 5M14 14l-5-5" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+    </button>
+
+    <div class="built-with">
+      <span>HTML5 / CSS3 / JS</span><span>Schema.org LocalBusiness</span><span>Node.js + Express</span><span>Nodemailer</span>
+    </div>
+
+    <dl class="stats-row">
+      <div class="stat"><dt>Projects in build</dt><dd>1</dd></div>
+      <div class="stat"><dt>Taking on</dt><dd>1–2 new projects</dd></div>
+      <div class="stat"><dt>Reply time</dt><dd>&lt; 24h</dd></div>
+    </dl>
+  </section>
+
+  <section class="contact reveal" id="contact">
+    <div class="sec-head">
+      <span class="sec-num">04</span>
+      <h2 class="sec-title">Contact</h2>
+    </div>
+    <p class="contact-copy">Drop your message and I'll get back to you as soon as possible — let's create something amazing together.</p>
+    <a class="email-btn" href="mailto:sebastianescobar180@gmail.com">✉ sebastianescobar180@gmail.com</a>
+    <p class="contact-meta mono">Malta · Remote-friendly</p>
+
+    <form class="msg-form" id="msgForm">
+      <div>
+        <label for="msgName">Name</label>
+        <input id="msgName" name="name" type="text" required />
+      </div>
+      <div>
+        <label for="msgEmail">Email</label>
+        <input id="msgEmail" name="email" type="email" required />
+      </div>
+      <div>
+        <label for="msgBody">Message</label>
+        <textarea id="msgBody" name="message" rows="4" required></textarea>
+      </div>
+      <button class="msg-submit" type="submit">Send message</button>
+      <p class="msg-status" id="msgStatus" role="status"></p>
+    </form>
+  </section>
+
+  <footer>Sebastián Escobar Arango — Portfolio — Malta</footer>
+</div>
+
+<div class="proj-modal" id="projModal" role="dialog" aria-modal="true" aria-label="Big Ron's Records — live preview" hidden>
+  <div class="proj-modal-bar">
+    <span class="mono">Big Ron's Records — live preview</span>
+    <button class="proj-modal-close" id="projModalClose" aria-label="Close preview">✕</button>
+  </div>
+  <div class="proj-modal-body">
+    <iframe id="projModalFrame" title="Big Ron's Records — live preview"></iframe>
+  </div>
+</div>
+
+<script>
+(function(){
+  document.documentElement.classList.add('js');
+
+  var stick = document.getElementById('stickBar');
+  var onScroll = function(){
+    if (window.scrollY > 40) stick.classList.add('scrolled');
+    else stick.classList.remove('scrolled');
+  };
+  document.addEventListener('scroll', onScroll, { passive:true });
+  onScroll();
+
+  var toggle = document.getElementById('menuToggle');
+  var menu = document.getElementById('dropdownMenu');
+  function closeMenu(){ menu.classList.remove('open'); toggle.setAttribute('aria-expanded','false'); }
+  function openMenu(){ menu.classList.add('open'); toggle.setAttribute('aria-expanded','true'); }
+  toggle.addEventListener('click', function(e){
+    e.stopPropagation();
+    if (menu.classList.contains('open')) closeMenu(); else openMenu();
+  });
+  menu.addEventListener('click', function(e){ if (e.target.closest('a')) closeMenu(); });
+  document.addEventListener('click', function(e){
+    if (!menu.contains(e.target) && e.target !== toggle) closeMenu();
+  });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeMenu(); });
+
+  if ('IntersectionObserver' in window) {
+    var items = document.querySelectorAll('.reveal');
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting) { entry.target.classList.add('in-view'); io.unobserve(entry.target); }
+      });
+    }, { threshold:0.12 });
+    items.forEach(function(el){ io.observe(el); });
+  }
+
+  var pToggle = document.getElementById('previewToggle');
+  var modal = document.getElementById('projModal');
+  var modalFrame = document.getElementById('projModalFrame');
+  var modalClose = document.getElementById('projModalClose');
+  var PROTO_SRC = 'bigrons-site/index.html';
+
+  function openModal(){
+    modalFrame.src = PROTO_SRC;
+    modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+    pToggle.setAttribute('aria-expanded', 'true');
+    modalClose.focus();
+  }
+  function closeModal(){
+    modal.hidden = true;
+    modalFrame.src = 'about:blank';
+    document.body.style.overflow = '';
+    pToggle.setAttribute('aria-expanded', 'false');
+    pToggle.focus();
+  }
+  pToggle.addEventListener('click', openModal);
+  modalClose.addEventListener('click', closeModal);
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && !modal.hidden) closeModal();
+  });
+
+  var form = document.getElementById('msgForm');
+  var status = document.getElementById('msgStatus');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var name = form.name.value.trim();
+    var email = form.email.value.trim();
+    var message = form.message.value.trim();
+    var subject = encodeURIComponent('New project enquiry from ' + name);
+    var body = encodeURIComponent(message + '\n\n— ' + name + ' (' + email + ')');
+    window.location.href = 'mailto:sebastianescobar180@gmail.com?subject=' + subject + '&body=' + body;
+    status.textContent = 'Opening your email app…';
+  });
+})();
+</script>
